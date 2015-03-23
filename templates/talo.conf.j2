@@ -1,0 +1,12 @@
+<VirtualHost *:80>
+	<IfModule mod_php5.c>
+		DocumentRoot {{ tlg_target_subdir }}
+		php_value doc_root "{{ tlg_target_subdir }}"
+		php_value open_basedir "{{ tlg_target_subdir }}"
+		php_value include_path ".:{{ tlg_target_subdir }}/scripts/taloLoggerGraph:/usr/share/jpgraph"
+		php_flag safe_mode yes
+	</IfModule>
+	LogLevel warn
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+</VirtualHost>
