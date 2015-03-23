@@ -81,17 +81,11 @@
     regexp='^#?@DATASTORE=MYSQLDB:MYSQLDB'
     line='@DATASTORE=MYSQLDB:MYSQLDB'
 
-- name: Add uptime datasource to taloLogger.conf
-  lineinfile: 
-    dest={{ tl_target_dir }}/taloLogger/taloLogger.conf 
-    regexp='^#?@DATASOURCE=SHELL:SHELL1'
-    line='@DATASOURCE=SHELL:SHELL1'
-
-- name: Comment out extra uptime regex
-  lineinfile:
-    dest={{ tl_target_dir }}/taloLogger/taloLogger.conf
-    regexp='susers'
-    line='#'
+#- name: Add shell datasource to taloLogger.conf
+#  lineinfile: 
+#    dest={{ tl_target_dir }}/taloLogger/taloLogger.conf 
+#    regexp='^#?@DATASOURCE=SHELL:SHELL1'
+#    line='@DATASOURCE=SHELL:SHELL1'
 
 - name: Set datastore as MYSQL in taloLoggerGraph.conf
   lineinfile:
