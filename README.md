@@ -13,7 +13,6 @@ To-do:
  - Installation of other datastores
  - Configuring serial I/O data source
  - Configuring graphs for additional data sources
- - sudo
  - nginx
  - Split graphing into separate role
 
@@ -22,7 +21,7 @@ To-do:
 ```
 ---
 - hosts: all
-  remote_user: root
+  sudo: yes
   roles:
     - taloLogger-role
 ```
