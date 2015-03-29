@@ -6,15 +6,14 @@ Implemented:
  - Download of taloLogger packages
  - Installation of MySQL datastore
  - Installation of taloLogger
- - Uptime data source configuration
  - Installation of taloLoggerGraph, initially for dummy data 
 
 To-do:
- - Installation of other datastores
- - Configuring serial I/O data source
- - Configuring graphs for additional data sources
+ - Installation of remaining datastores
+ - Configuring serial I/O data source (in separate role)
+ - Split taloLoggerGraph into separate role
+ - Configure graphs for additional data sources
  - nginx
- - Split graphing into separate role
 
 # Example playbook
 
