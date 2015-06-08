@@ -1,6 +1,6 @@
 # taloLogger-role
 Ansible role for installing olammi's taloLogger. Tested to work on Debian
-squeeze (SPARC) with latest ansible available from pip.
+squeeze (SPARC) and Raspbian (ARM) with latest ansible available from pip.
 
 Implemented:
  - Download of taloLogger packages
@@ -24,4 +24,3 @@ To-do:
   roles:
     - taloLogger-role
 ```
-
