@@ -6,34 +6,34 @@
   file: dest={{ tl_log_dir }} state=directory owner={{ tl_dir_owner }} mode=0755
 
 - name: Retrieve taloLogger installation package
-  get_url: url={{ tl_download_URL }}/{{ tl_package }} dest={{ tl_target_dir }}
+  get_url: url={{ tl_download_URL }}/{{ tl_package }} dest={{ tl_target_dir }}/{{ tl_package }}
 
 - name: Unzip taloLogger installation package
   unarchive: src={{ tl_target_dir }}/{{ tl_package }} dest={{ tl_target_dir }} creates={{ tl_target_dir }}/taloLogger copy=no
 
-- name: Ensure taloLoggerGraph target subdir exists and has proper permissions
-  file: dest={{ tlg_target_subdir }} state=directory owner={{ tlg_dir_owner }} mode=0755
-
-- name: Ensure taloLoggerGraph target dir exists and has proper permissions
-  file: dest={{ tlg_target_dir }} state=directory owner={{ tlg_dir_owner }} mode=0755
-
-- name: Ensure taloLoggerGraph execution dir exists and has proper permissions
-  file: dest={{ tlg_target_subdir }}/log state=directory owner={{ tlg_dir_owner }} mode=0755
-
-- name: Retrieve taloLoggerGraph installation package
-  get_url: url={{ tl_graph_download_URL }}/{{ tl_graph_package }} dest={{ tl_target_dir }}
-
-- name: Unzip taloLoggerGraph installation package
-  unarchive: src={{ tl_target_dir }}/{{ tl_graph_package }} dest={{ tlg_target_dir }} copy=no
-
-- name: Copy index.php
-  copy: src={{ tlg_target_dir }}/taloLoggerGraph/index.php dest={{ tlg_target_subdir }}/log owner={{ tlg_dir_owner }} group={{ tlg_dir_owner }} mode=0755
-
-- name: Copy taloLoggerGraph.conf
-  copy: src={{ tlg_target_dir }}/taloLoggerGraph/taloLoggerGraph.conf dest={{ tlg_target_subdir }}/log owner={{ tlg_dir_owner }} group={{ tlg_dir_owner }} mode=0755
-
-- name: Create symlink to getchart.php
-  file: src={{ tlg_target_dir }}/taloLoggerGraph/taloLoggerGraph_getchart.php dest={{ tlg_target_subdir }}/log/taloLoggerGraph_getchart.php state=link
+#- name: Ensure taloLoggerGraph target subdir exists and has proper permissions
+#  file: dest={{ tlg_target_subdir }} state=directory owner={{ tlg_dir_owner }} mode=0755
+#
+#- name: Ensure taloLoggerGraph target dir exists and has proper permissions
+#  file: dest={{ tlg_target_dir }} state=directory owner={{ tlg_dir_owner }} mode=0755
+#
+#- name: Ensure taloLoggerGraph execution dir exists and has proper permissions
+#  file: dest={{ tlg_target_subdir }}/log state=directory owner={{ tlg_dir_owner }} mode=0755
+#
+#- name: Retrieve taloLoggerGraph installation package
+#  get_url: url={{ tl_graph_download_URL }}/{{ tl_graph_package }} dest={{ tl_target_dir }}
+#
+#- name: Unzip taloLoggerGraph installation package
+#  unarchive: src={{ tl_target_dir }}/{{ tl_graph_package }} dest={{ tlg_target_dir }} copy=no
+#
+#- name: Copy index.php
+#  command: cp {{ tlg_target_subdir }}/taloLoggerGraph/index.php {{ tlg_target_dir }}/log
+#
+#- name: Copy taloLoggerGraph.conf
+#  command: cp {{ tlg_target_subdir }}/taloLoggerGraph/taloLoggerGraph.conf {{ tlg_target_dir }}/log
+#
+#- name: Create symlink to getchart.php
+#  file: src={{ tlg_target_dir }}/taloLoggerGraph/taloLoggerGraph_getchart.php dest={{ tlg_target_subdir }}/log/taloLoggerGraph_getchart.php state=link
 
 - name: Install dependencies
   apt: pkg={{ item }} state=present update_cache=yes cache_valid_time=86400
@@ -86,40 +86,40 @@
 #    dest={{ tl_target_dir }}/taloLogger/taloLogger.conf 
 #    regexp='^#?@DATASOURCE=SHELL:SHELL1'
 #    line='@DATASOURCE=SHELL:SHELL1'
-
-- name: Set datastore as MYSQL in taloLoggerGraph.conf
-  lineinfile:
-    dest={{ tlg_target_subdir }}/log/taloLoggerGraph.conf
-    regexp='^DB_TYPE'
-    line='DB_TYPE = MYSQL'
-
-- name: Enable JavaScript charts in taloLoggerGraph.conf
-  lineinfile:
-    dest={{ tlg_target_subdir }}/log/taloLoggerGraph.conf
-    regexp='^JAVASCRIPT_CHARTS'
-    line='JAVASCRIPT_CHARTS = true'
-
-- name: Set static path for example image
-  lineinfile:
-    dest={{ tlg_target_subdir }}/log/taloLoggerGraph.conf
-    regexp='^BACKGROUND'
-    line='BACKGROUND = {{ tlg_target_dir }}/taloLoggerGraph/docs/ghp_process.png'
-
-- name: Set permissions for web directory
-  shell: 'chown -R www-data:www-data {{ tlg_target_subdir }}'
-
-- name: Add Apache2 configuration
-  template:
-    src=templates/talo.conf.j2
-    dest=/etc/apache2/sites-available/talo
-    owner=root
-    group=root
-    mode=0644
-
-- name: Disable the default site
-  command: a2dissite default
-
-- name: Enable talo virtualhost
-  command: a2ensite talo
-  notify:
-    - restart httpd
+#
+#- name: Set datastore as MYSQL in taloLoggerGraph.conf
+#  lineinfile:
+#    dest={{ tlg_target_subdir }}/log/taloLoggerGraph.conf
+#    regexp='^DB_TYPE'
+#    line='DB_TYPE = MYSQL'
+#
+#- name: Enable JavaScript charts in taloLoggerGraph.conf
+#  lineinfile:
+#    dest={{ tlg_target_subdir }}/log/taloLoggerGraph.conf
+#    regexp='^JAVASCRIPT_CHARTS'
+#    line='JAVASCRIPT_CHARTS = true'
+#
+#- name: Set static path for example image
+#  lineinfile:
+#    dest={{ tlg_target_subdir }}/log/taloLoggerGraph.conf
+#    regexp='^BACKGROUND'
+#    line='BACKGROUND = {{ tlg_target_dir }}/taloLoggerGraph/docs/ghp_process.png'
+#
+#- name: Set permissions for web directory
+#  shell: 'chown -R www-data:www-data {{ tlg_target_subdir }}'
+#
+#- name: Add Apache2 configuration
+#  template:
+#    src=templates/talo.conf.j2
+#    dest=/etc/apache2/sites-available/talo
+#    owner=root
+#    group=root
+#    mode=0644
+#
+#- name: Disable the default site
+#  command: a2dissite default
+#
+#- name: Enable talo virtualhost
+#  command: a2ensite talo
+#  notify:
+#    - restart httpd

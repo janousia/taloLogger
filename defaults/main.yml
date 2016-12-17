@@ -1,11 +1,11 @@
 ---
 # general config
 tl_target_dir: /home/talo
-tlg_target_subdir: "{{ tl_target_dir }}/public_html"
-tlg_target_dir: "{{ tl_target_dir }}/public_html/scripts"
+#tlg_target_dir: "{{ tl_target_dir }}/public_html"
+#tlg_target_subdir: "{{ tl_target_dir }}/public_html/scripts"
 tl_log_dir: "{{ tl_target_dir }}/log/"
 tl_dir_owner: "{{ ansible_user_id }}"
-tlg_dir_owner: "{{ ansible_user_id }}"
+#tlg_dir_owner: "{{ ansible_user_id }}"
 tl_download_URL: http://olammi.iki.fi/sw/taloLogger
 tl_graph_download_URL: http://olammi.iki.fi/sw/taloLoggerGraph
 tl_package: taloLogger_v17d.zip
