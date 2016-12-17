@@ -1,4 +1,10 @@
 ---
+- name: Install dependencies
+  apt: pkg={{ item }} state=present update_cache=yes cache_valid_time=86400
+  with_items: 
+    - unzip
+    - python-mysqldb
+
 - name: Ensure taloLogger target dir exists and has proper permissions
   file: dest={{ tl_target_dir }} state=directory owner={{ tl_dir_owner }} mode=0755
 
@@ -34,17 +40,6 @@
 #
 #- name: Create symlink to getchart.php
 #  file: src={{ tlg_target_dir }}/taloLoggerGraph/taloLoggerGraph_getchart.php dest={{ tlg_target_subdir }}/log/taloLoggerGraph_getchart.php state=link
-
-- name: Install dependencies
-  apt: pkg={{ item }} state=present update_cache=yes cache_valid_time=86400
-  with_items: 
-    - apache2
-    - php5
-    - libapache2-mod-php5
-    - unzip
-    - python-mysqldb
-    - php5-mysql
-    - libphp-jpgraph
 
 - name: Insert MySQL root password to debconf configuration
   debconf:
