@@ -28,9 +28,9 @@
     login_password="{{ MYSQL_ROOT_PASS }}"
     name=talo state=present
 
-- name: Add MySQL datastore to taloLogger.conf
+- name: Assign bind address on interface
   lineinfile:
     dest=/etc/mysql/my.cnf
     regexp='^bind-address'
     line='bind-address=0.0.0.0'
-  when: db_only
+  when: listen_if

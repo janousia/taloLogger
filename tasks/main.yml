@@ -1,6 +1,3 @@
 ---
-# Datastore(s)
 - include: mysql.yml
-# Core software
 - include: tl.yml
-  when: db_only is not defined

@@ -13,3 +13,5 @@ MYSQL_ROOT_PASS: xxpassxx
 #MY_USERNAME: # MySQL user
 #MY_PASSWORD: # MySQL pass
 #MYSQL_IP: # MySQL listener IP or FQDN
+
+db_only: false

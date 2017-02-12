@@ -1,26 +1,29 @@
 ---
-- name: Install dependencies
-  apt: pkg={{ item }} state=present update_cache=yes cache_valid_time=86400
-  with_items: 
-    - unzip
-    - python-mysqldb
+- block:
+  - name: Install dependencies
+    apt: pkg={{ item }} state=present update_cache=yes cache_valid_time=86400
+    with_items:
+      - unzip
+      - python-mysqldb
 
-- name: Ensure taloLogger target dir exists and has proper permissions
-  file: dest={{ tl_target_dir }} state=directory owner={{ tl_dir_owner }} mode=0755
+  - name: Ensure taloLogger target dir exists and has proper permissions
+    file: dest={{ tl_target_dir }} state=directory owner={{ tl_dir_owner }} mode=0755
 
-- name: Ensure taloLogger log dir exists and has proper permissions
-  file: dest={{ tl_log_dir }} state=directory owner={{ tl_dir_owner }} mode=0755
+  - name: Ensure taloLogger log dir exists and has proper permissions
+    file: dest={{ tl_log_dir }} state=directory owner={{ tl_dir_owner }} mode=0755
 
-- name: Retrieve taloLogger installation package
-  get_url: url={{ tl_download_URL }}/{{ tl_package }} dest={{ tl_target_dir }}/{{ tl_package }}
+  - name: Retrieve taloLogger installation package
+    get_url: url={{ tl_download_URL }}/{{ tl_package }} dest={{ tl_target_dir }}/{{ tl_package }}
 
-- name: Unzip taloLogger installation package
-#  unarchive: src={{ tl_target_dir }}/{{ tl_package }} dest={{ tl_target_dir }} creates={{ tl_sw_dir }} copy=no
-  unarchive: src={{ tl_target_dir }}/{{ tl_package }} dest={{ tl_target_dir }} copy=no
+  - name: Unzip taloLogger installation package
+    unarchive: src={{ tl_target_dir }}/{{ tl_package }} dest={{ tl_target_dir }} copy=no
 
-# TODO datastore handling
-- name: Add MySQL datastore to taloLogger.conf
-  lineinfile:
-    dest={{ tl_target_dir }}/taloLogger/taloLogger.conf
-    regexp='^#?@DATASTORE=MYSQLDB:MYSQLDB'
-    line='@DATASTORE=MYSQLDB:MYSQLDB'
+  # TODO datastore handling
+  - name: Add MySQL datastore to taloLogger.conf
+    lineinfile:
+      dest={{ tl_target_dir }}/taloLogger/taloLogger.conf
+      regexp='^#?@DATASTORE=MYSQLDB:MYSQLDB'
+      line='@DATASTORE=MYSQLDB:MYSQLDB'
+
+  when: db_only == 'false'
+
