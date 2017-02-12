@@ -1,54 +1,6 @@
 ---
-- name: Install dependencies
-  apt: pkg={{ item }} state=present update_cache=yes cache_valid_time=86400
-  with_items: 
-    - unzip
-    - python-mysqldb
-
-- name: Ensure taloLogger target dir exists and has proper permissions
-  file: dest={{ tl_target_dir }} state=directory owner={{ tl_dir_owner }} mode=0755
-
-- name: Ensure taloLogger log dir exists and has proper permissions
-  file: dest={{ tl_log_dir }} state=directory owner={{ tl_dir_owner }} mode=0755
-
-- name: Retrieve taloLogger installation package
-  get_url: url={{ tl_download_URL }}/{{ tl_package }} dest={{ tl_target_dir }}/{{ tl_package }}
-
-- name: Unzip taloLogger installation package
-#  unarchive: src={{ tl_target_dir }}/{{ tl_package }} dest={{ tl_target_dir }} creates={{ tl_sw_dir }} copy=no
-  unarchive: src={{ tl_target_dir }}/{{ tl_package }} dest={{ tl_target_dir }} copy=no
-
-- name: Insert MySQL root password to debconf configuration
-  debconf:
-    name: 'mysql-server'
-    question: "{{ item }}"
-    value: '{{ MYSQL_ROOT_PASS | quote }}'
-    vtype: 'password'
-  with_items:
-    - mysql-server/root_password
-    - mysql-server/root_password_again
-
-- name: Install datastore MySQL
-  apt: pkg=mysql-server state=present
-  when: IS_DATASTORE_MYSQL
-
-- name: Install talo MySQL user
-  mysql_user: 
-    login_user=root 
-    login_password="{{ MYSQL_ROOT_PASS }}"
-    name=talo 
-    password=xxpassxx 
-    priv=*.*:ALL,GRANT
-    state=present
-
-- name: Create talo MySQL database
-  mysql_db: 
-    login_user=root
-    login_password="{{ MYSQL_ROOT_PASS }}"
-    name=talo state=present
-
-- name: Add MySQL datastore to taloLogger.conf
-  lineinfile:
-    dest={{ tl_target_dir }}/taloLogger/taloLogger.conf
-    regexp='^#?@DATASTORE=MYSQLDB:MYSQLDB'
-    line='@DATASTORE=MYSQLDB:MYSQLDB'
+# Datastore(s)
+- include: mysql.yml
+# Core software
+- include: tl.yml
+  when: db_only is not defined
